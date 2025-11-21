@@ -1,5 +1,11 @@
-function ReportsPage() {
-  return <div>Reports</div>;
+import ListHeader from "@/app/ui/reports-list/list-header";
+
+function ReportsListPage() {
+  return (
+    <div>
+      <ListHeader />
+    </div>
+  );
 }
 
-export default ReportsPage;
+export default ReportsListPage;
