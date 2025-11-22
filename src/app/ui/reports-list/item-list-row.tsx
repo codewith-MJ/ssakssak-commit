@@ -1,5 +1,6 @@
 "use client";
 
+import formatDate from "@/lib/util/date-formatter";
 import { ReportListItem } from "@/types/report";
 import { useRouter } from "next/navigation";
 
@@ -34,7 +35,7 @@ function ReportsTableRow({ item }: ReportsTableRowProps) {
       </td>
 
       <td className="px-5 py-3 text-center align-middle text-sm whitespace-nowrap text-gray-500">
-        {item.createdAt}
+        {formatDate(item.createdAt)}
       </td>
     </tr>
   );
