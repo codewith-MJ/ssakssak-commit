@@ -2,11 +2,7 @@ import { ReportListItem } from "@/types/report";
 import ReportsTableRow from "./item-list-row";
 import EmptyState from "./empty-state";
 
-type ReportsTableProps = {
-  data: ReportListItem[];
-};
-
-function ReportsTable({ data }: ReportsTableProps) {
+function ReportsTable({ data }: { data: ReportListItem[] }) {
   const isEmpty = data.length === 0;
   return (
     <div className="divide-y rounded-lg border bg-white">
