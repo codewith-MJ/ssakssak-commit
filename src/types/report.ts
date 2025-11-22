@@ -18,7 +18,7 @@ interface ReportListItem {
   repositoryName: string;
   owner: string;
   branch: string;
-  repositoryUrl: string;
+  repositoryUrl?: string;
   createdAt: string;
 }
 
