@@ -12,4 +12,14 @@ interface ReportData {
   branch: string;
 }
 
-export type { ReportData, ReportFormState };
+interface ReportListItem {
+  reportId: string;
+  reportTitle: string;
+  repositoryName: string;
+  owner: string;
+  branch: string;
+  repositoryUrl: string;
+  createdAt: string;
+}
+
+export type { ReportData, ReportFormState, ReportListItem };
