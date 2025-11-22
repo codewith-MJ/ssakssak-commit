@@ -21,7 +21,10 @@ async function ReportsListPage() {
   return (
     <div className="mx-auto max-w-[1100px] px-5 py-12">
       <ListHeader />
-      <ReportsListSection reports={items} />
+      <ReportsListSection
+        reports={items}
+        pagination={{ page: 1, totalPages: 5 }}
+      />
     </div>
   );
 }
