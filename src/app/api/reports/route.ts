@@ -10,9 +10,8 @@ import { requireUserId } from "@/lib/auth/require-session";
 import getUserId from "@/lib/auth/get-user-id";
 
 async function GET() {
-  const userId = await requireUserId();
-
   try {
+    const userId = await requireUserId();
     const items = await getReports(userId);
 
     await checkRateLimit();
