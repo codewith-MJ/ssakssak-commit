@@ -19,12 +19,9 @@ async function ReportsListPage() {
   const { items } = await response.json();
 
   return (
-    <div className="mx-auto max-w-[1100px] px-5 py-12">
+    <div className="mx-auto max-w-[1100px] px-5 py-8">
       <ListHeader />
-      <ReportsListSection
-        reports={items}
-        pagination={{ page: 1, totalPages: 5 }}
-      />
+      <ReportsListSection reports={items} />
     </div>
   );
 }

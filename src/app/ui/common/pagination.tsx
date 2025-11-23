@@ -46,22 +46,39 @@ function PaginationLink({
   className,
   isActive,
   size = "icon",
+  children,
   ...props
 }: PaginationLinkProps) {
+  const isDisabled = isActive || !props.href;
+
   return (
     <a
       aria-current={isActive ? "page" : undefined}
+      aria-disabled={isDisabled ? "true" : undefined}
       data-slot="pagination-link"
       data-active={isActive}
+      tabIndex={isDisabled ? -1 : props.tabIndex}
+      onClick={(e) => {
+        if (isDisabled) {
+          e.preventDefault();
+          return;
+        }
+        props.onClick?.(e);
+      }}
       className={cn(
         buttonVariants({
           variant: isActive ? "outline" : "ghost",
           size,
         }),
+        isActive &&
+          "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
+        isDisabled && "pointer-events-none cursor-not-allowed opacity-50",
         className,
       )}
       {...props}
-    />
+    >
+      {children}
+    </a>
   );
 }
 
@@ -77,7 +94,7 @@ function PaginationPrevious({
       {...props}
     >
       <ChevronLeftIcon />
-      <span className="hidden sm:block">Previous</span>
+      <span className="hidden sm:block">이전</span>
     </PaginationLink>
   );
 }
@@ -93,7 +110,7 @@ function PaginationNext({
       className={cn("gap-1 px-2.5 sm:pr-2.5", className)}
       {...props}
     >
-      <span className="hidden sm:block">Next</span>
+      <span className="hidden sm:block">다음</span>
       <ChevronRightIcon />
     </PaginationLink>
   );

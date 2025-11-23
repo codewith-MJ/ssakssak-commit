@@ -1,3 +1,5 @@
+"use client";
+
 import {
   Pagination,
   PaginationContent,
@@ -10,43 +12,67 @@ import {
 type ReportsPaginationProps = {
   currentPage: number;
   totalPages: number;
+  onPageChange: (page: number) => void;
 };
 
 export function ReportsPagination({
   currentPage,
   totalPages,
+  onPageChange,
 }: ReportsPaginationProps) {
-  if (totalPages <= 1) return null;
+  if (totalPages < 1) return null;
 
-  const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
+  const MAX_VISIBLE = 5;
 
-  const getHref = (page: number) => `?page=${page}`;
+  const blockIndex = Math.floor((currentPage - 1) / MAX_VISIBLE);
+  const startPage = blockIndex * MAX_VISIBLE + 1;
+  const endPage = Math.min(totalPages, startPage + MAX_VISIBLE - 1);
+
+  const pages: number[] = [];
+  for (let p = startPage; p <= endPage; p++) {
+    pages.push(p);
+  }
+
+  const prevPage = startPage > 1 ? startPage - MAX_VISIBLE : null;
+  const nextPage = endPage < totalPages ? endPage + 1 : null;
 
   return (
     <Pagination>
       <PaginationContent>
-        {currentPage > 1 && (
-          <PaginationItem>
-            <PaginationPrevious href={getHref(currentPage - 1)} />
-          </PaginationItem>
-        )}
+        <PaginationItem>
+          <PaginationPrevious
+            href={prevPage ? "#" : undefined}
+            onClick={(e) => {
+              e.preventDefault();
+              if (prevPage) onPageChange(prevPage);
+            }}
+          />
+        </PaginationItem>
 
         {pages.map((page) => (
           <PaginationItem key={page}>
             <PaginationLink
-              href={getHref(page)}
+              href={page === currentPage ? undefined : "#"}
               isActive={page === currentPage}
+              onClick={(e) => {
+                e.preventDefault();
+                onPageChange(page);
+              }}
             >
               {page}
             </PaginationLink>
           </PaginationItem>
         ))}
 
-        {currentPage < totalPages && (
-          <PaginationItem>
-            <PaginationNext href={getHref(currentPage + 1)} />
-          </PaginationItem>
-        )}
+        <PaginationItem>
+          <PaginationNext
+            href={nextPage ? "#" : undefined}
+            onClick={(e) => {
+              e.preventDefault();
+              if (nextPage) onPageChange(nextPage);
+            }}
+          />
+        </PaginationItem>
       </PaginationContent>
     </Pagination>
   );
