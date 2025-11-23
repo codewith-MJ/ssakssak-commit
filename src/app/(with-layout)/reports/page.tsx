@@ -19,7 +19,7 @@ async function ReportsListPage() {
   const { items } = await response.json();
 
   return (
-    <div className="mx-auto max-w-[1100px] px-5 py-8">
+    <div className="mx-auto max-w-[1100px] py-1">
       <ListHeader />
       <ReportsListSection reports={items} />
     </div>

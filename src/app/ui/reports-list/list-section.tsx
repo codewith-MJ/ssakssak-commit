@@ -30,7 +30,7 @@ function ReportsListSection({ reports }: ReportsListSectionProps) {
     });
 
   return (
-    <section className="mt-8">
+    <section className="mt-6">
       <div className="mb-4">
         <SearchBar value={search} onChange={setSearch} />
       </div>

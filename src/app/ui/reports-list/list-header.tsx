@@ -1,9 +1,9 @@
 function ListHeader() {
   return (
-    <header className="mt-10 mb-10 ml-15">
-      <div className="flex items-start justify-between gap-6">
+    <header>
+      <div className="flex items-start justify-between">
         <div>
-          <h1 className="mb-3 text-[32px] font-semibold tracking-tight">
+          <h1 className="text-[32px] font-semibold tracking-tight">
             🗂️ 리포트 목록
           </h1>
 
