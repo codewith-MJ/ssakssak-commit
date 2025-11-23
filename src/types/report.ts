@@ -22,4 +22,13 @@ interface ReportListItem {
   createdAt: string;
 }
 
-export type { ReportData, ReportFormState, ReportListItem };
+type SortField = "reportTitle" | "repositoryName" | "branch" | "createdAt";
+type SortOrder = "asc" | "desc";
+
+export type {
+  ReportData,
+  ReportFormState,
+  ReportListItem,
+  SortField,
+  SortOrder,
+};
