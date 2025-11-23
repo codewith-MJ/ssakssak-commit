@@ -7,12 +7,12 @@ type UseSearchProps = {
 };
 
 function useSearch({ data, searchFields }: UseSearchProps) {
-  const [search, setSearch] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const filteredData = useMemo(() => {
-    if (!search.trim()) return data;
+    if (!searchQuery.trim()) return data;
 
-    const searchLower = search.toLowerCase().trim();
+    const searchLower = searchQuery.toLowerCase().trim();
 
     return data.filter((item) => {
       return searchFields.some((field) => {
@@ -21,9 +21,9 @@ function useSearch({ data, searchFields }: UseSearchProps) {
         return String(value).toLowerCase().includes(searchLower);
       });
     });
-  }, [data, search, searchFields]);
+  }, [data, searchQuery, searchFields]);
 
-  return { filteredData, search, setSearch };
+  return { filteredData, searchQuery, setSearchQuery };
 }
 
 export default useSearch;

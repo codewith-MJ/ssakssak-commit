@@ -15,7 +15,7 @@ type ReportsListSectionProps = {
 };
 
 function ReportsListSection({ reports }: ReportsListSectionProps) {
-  const { filteredData, search, setSearch } = useSearch({
+  const { filteredData, searchQuery, setSearchQuery } = useSearch({
     data: reports,
     searchFields: SEARCH_FIELDS,
   });
@@ -35,10 +35,13 @@ function ReportsListSection({ reports }: ReportsListSectionProps) {
   return (
     <section className="mt-6">
       <div className="mb-4">
-        <SearchBar value={search} onChange={setSearch} />
+        <SearchBar value={searchQuery} onChange={setSearchQuery} />
       </div>
       {hasNoSearchResults ? (
-        <SearchEmptyState searchTerm={search} onClear={() => setSearch("")} />
+        <SearchEmptyState
+          searchTerm={searchQuery}
+          onClear={() => setSearchQuery("")}
+        />
       ) : (
         <>
           <ReportsTable
