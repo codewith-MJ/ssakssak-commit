@@ -8,6 +8,7 @@ import usePagination from "@/hooks/usePagination";
 import useSort from "@/hooks/useSort";
 import useSearch from "@/hooks/useSearch";
 import SearchBar from "./search-bar";
+import SearchEmptyState from "./search-empty-state";
 
 type ReportsListSectionProps = {
   reports: ReportListItem[];
@@ -29,25 +30,33 @@ function ReportsListSection({ reports }: ReportsListSectionProps) {
       pageSize: DEFAULT_PAGE_SIZE,
     });
 
+  const hasNoSearchResults = reports.length > 0 && filteredData.length === 0;
+
   return (
     <section className="mt-6">
       <div className="mb-4">
         <SearchBar value={search} onChange={setSearch} />
       </div>
-      <ReportsTable
-        data={paginatedData}
-        sortField={sortField}
-        sortOrder={sortOrder}
-        onSort={handleSort}
-      />
+      {hasNoSearchResults ? (
+        <SearchEmptyState searchTerm={search} onClear={() => setSearch("")} />
+      ) : (
+        <>
+          <ReportsTable
+            data={paginatedData}
+            sortField={sortField}
+            sortOrder={sortOrder}
+            onSort={handleSort}
+          />
 
-      <div className="mt-6 flex justify-center">
-        <ReportsPagination
-          currentPage={currentPage}
-          totalPages={totalPages}
-          onPageChange={setCurrentPage}
-        />
-      </div>
+          <div className="mt-6 flex justify-center">
+            <ReportsPagination
+              currentPage={currentPage}
+              totalPages={totalPages}
+              onPageChange={setCurrentPage}
+            />
+          </div>
+        </>
+      )}
     </section>
   );
 }
