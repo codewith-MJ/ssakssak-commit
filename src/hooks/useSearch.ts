@@ -3,7 +3,7 @@ import { ReportListItem } from "@/types/report";
 
 type UseSearchProps = {
   data: ReportListItem[];
-  searchFields: (keyof ReportListItem)[];
+  searchFields: readonly (keyof ReportListItem)[];
 };
 
 function useSearch({ data, searchFields }: UseSearchProps) {

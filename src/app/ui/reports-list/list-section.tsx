@@ -3,7 +3,7 @@
 import { ReportListItem } from "@/types/report";
 import ReportsTable from "./report-table";
 import { ReportsPagination } from "./reports-pagination";
-import { DEFAULT_PAGE_SIZE } from "@/constants/report";
+import { DEFAULT_PAGE_SIZE, SEARCH_FIELDS } from "@/constants/report";
 import usePagination from "@/hooks/usePagination";
 import useSort from "@/hooks/useSort";
 import useSearch from "@/hooks/useSearch";
@@ -17,7 +17,7 @@ type ReportsListSectionProps = {
 function ReportsListSection({ reports }: ReportsListSectionProps) {
   const { filteredData, search, setSearch } = useSearch({
     data: reports,
-    searchFields: ["reportTitle", "repositoryName", "branch"],
+    searchFields: SEARCH_FIELDS,
   });
 
   const { sortedData, sortField, sortOrder, handleSort } = useSort({
