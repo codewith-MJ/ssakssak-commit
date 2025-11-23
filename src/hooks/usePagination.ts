@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 type UsePaginationProps<T> = {
   data: T[];
@@ -15,7 +15,7 @@ function usePagination<T>({ data, pageSize }: UsePaginationProps<T>) {
     return data.slice(startIndex, startIndex + pageSize);
   }, [data, currentPage, pageSize]);
 
-  useMemo(() => {
+  useEffect(() => {
     if (currentPage > totalPages && totalPages > 0) {
       setCurrentPage(1);
     }
