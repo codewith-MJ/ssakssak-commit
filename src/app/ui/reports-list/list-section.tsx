@@ -2,7 +2,7 @@
 
 import { ReportListItem } from "@/types/report";
 import ReportsTable from "./report-table";
-import { ReportsPagination } from "./reports-pagination";
+import ReportsPagination from "./reports-pagination";
 import { DEFAULT_PAGE_SIZE, SEARCH_FIELDS } from "@/constants/report";
 import usePagination from "@/hooks/usePagination";
 import useSort from "@/hooks/useSort";

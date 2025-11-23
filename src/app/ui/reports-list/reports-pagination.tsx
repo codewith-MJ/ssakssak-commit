@@ -15,7 +15,7 @@ type ReportsPaginationProps = {
   onPageChange: (page: number) => void;
 };
 
-export function ReportsPagination({
+function ReportsPagination({
   currentPage,
   totalPages,
   onPageChange,
@@ -77,3 +77,5 @@ export function ReportsPagination({
     </Pagination>
   );
 }
+
+export default ReportsPagination;
