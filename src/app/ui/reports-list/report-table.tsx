@@ -1,7 +1,8 @@
 import { ReportListItem, SortField, SortOrder } from "@/types/report";
 import ReportsTableRow from "./item-list-row";
 import EmptyState from "./empty-state";
-import { ChevronUpIcon, ChevronDownIcon } from "lucide-react";
+import ReportsTableHeader from "./item-list-header";
+import { SORT_FIELDS } from "@/constants/report";
 
 type ReportsTableProps = {
   data: ReportListItem[];
@@ -18,18 +19,6 @@ function ReportsTable({
 }: ReportsTableProps) {
   const isEmpty = data.length === 0;
 
-  const SortIcon = ({ field }: { field: SortField }) => {
-    const isActive = sortField === field;
-
-    if (!isActive) return null;
-
-    return sortOrder === "asc" ? (
-      <ChevronUpIcon className="ml-1 h-4 w-4" />
-    ) : (
-      <ChevronDownIcon className="ml-1 h-4 w-4" />
-    );
-  };
-
   return (
     <div className="divide-y rounded-lg border bg-white">
       {isEmpty ? (
@@ -39,42 +28,45 @@ function ReportsTable({
           <table className="w-full table-fixed border-collapse">
             <thead className="border-b border-gray-200 bg-gray-50">
               <tr className="text-left text-[18px] text-gray-700">
-                <th className="w-[35%] px-5 py-3 font-semibold">
-                  <button
-                    onClick={() => onSort("reportTitle")}
-                    className="flex items-center transition-colors hover:text-gray-900"
-                  >
-                    리포트 제목
-                    <SortIcon field="reportTitle" />
-                  </button>
-                </th>
-                <th className="w-[30%] px-3 py-3 font-semibold">
-                  <button
-                    onClick={() => onSort("repositoryName")}
-                    className="flex items-center transition-colors hover:text-gray-900"
-                  >
-                    저장소
-                    <SortIcon field="repositoryName" />
-                  </button>
-                </th>
-                <th className="w-[20%] px-3 py-3 font-semibold">
-                  <button
-                    onClick={() => onSort("branch")}
-                    className="flex items-center transition-colors hover:text-gray-900"
-                  >
-                    브랜치
-                    <SortIcon field="branch" />
-                  </button>
-                </th>
-                <th className="w-[15%] px-5 py-3 font-semibold">
-                  <button
-                    onClick={() => onSort("createdAt")}
-                    className="flex items-center justify-center transition-colors hover:text-gray-900"
-                  >
-                    생성일
-                    <SortIcon field="createdAt" />
-                  </button>
-                </th>
+                <ReportsTableHeader
+                  field={SORT_FIELDS.TITLE}
+                  currentSortField={sortField}
+                  sortOrder={sortOrder}
+                  onSort={onSort}
+                  className="w-[35%] px-5 py-3 font-semibold"
+                >
+                  리포트 제목
+                </ReportsTableHeader>
+
+                <ReportsTableHeader
+                  field={SORT_FIELDS.REPOSITORY}
+                  currentSortField={sortField}
+                  sortOrder={sortOrder}
+                  onSort={onSort}
+                  className="w-[30%] px-3 py-3 font-semibold"
+                >
+                  저장소
+                </ReportsTableHeader>
+
+                <ReportsTableHeader
+                  field={SORT_FIELDS.BRANCH}
+                  currentSortField={sortField}
+                  sortOrder={sortOrder}
+                  onSort={onSort}
+                  className="w-[20%] px-3 py-3 font-semibold"
+                >
+                  브랜치
+                </ReportsTableHeader>
+
+                <ReportsTableHeader
+                  field={SORT_FIELDS.CREATED_AT}
+                  currentSortField={sortField}
+                  sortOrder={sortOrder}
+                  onSort={onSort}
+                  className="w-[15%] px-5 py-3 font-semibold"
+                >
+                  생성일
+                </ReportsTableHeader>
               </tr>
             </thead>
             <tbody>
