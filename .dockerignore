@@ -1,0 +1,42 @@
+# Node modules
+
+node_modules
+
+# Git
+
+.git
+.gitignore
+
+# Environment files
+
+.env
+.env.*
+
+# Logs
+
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log\*
+
+# OS files
+
+.DS_Store
+
+# Next.js build chache
+
+.next
+
+# Keys / Certificates
+
+*.pem
+*.key
+*.crt
+
+# 문서
+
+docs/
+
+# Tooling / CI
+
+.husky/
+.github/
