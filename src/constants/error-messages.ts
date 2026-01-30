@@ -61,6 +61,10 @@ const OPENAI_ERROR_MESSAGES = {
     "모델 응답에서 output_text를 찾지 못했습니다. prompt/형식 지시 또는 zod 포맷 설정을 점검하세요.",
   INCOMPLETE_DUE_TO_MAX_TOKENS:
     "모델 응답이 출력 토큰 한도(max_output_tokens)로 잘렸습니다. max_output_tokens 값을 늘리거나 배치 크기를 줄여주세요.",
+  COMMIT_ID_DUPLICATE:
+    "응답에 중복된 commitId가 포함되어 있습니다. 각 커밋은 고유한 commitId를 가져야 합니다.",
+  MISSING_REQUIRED_ANALYSES:
+    "응답에 필수 analyses 항목(code-diff 또는 explanation)이 누락된 커밋이 있습니다.",
 };
 
 const PROVIDER_ERROR_MESSAGES = {

@@ -11,6 +11,7 @@ import {
 } from "@/infra/integrations/openai/instructions";
 import { REQUEST_INPUT_INTRO_MESSAGE } from "@/constants/open-ai";
 import { TOKEN_LIMITS } from "@/constants/open-ai";
+import { validateCommitAnalysesResponse } from "@/infra/integrations/openai/helpers/validate-analysis-response";
 
 interface ExtractedCommitSummaries {
   commitId: string;
@@ -32,13 +33,17 @@ const requestCommitAnalysis = async (
     repositoryOverview: repositoryOverview,
   });
 
-  return await structuredTextGenerator({
+  const result = await structuredTextGenerator({
     maxOutputTokens: MAX_OUTPUT_TOKENS_PER_BATCH,
     instructions: COMMIT_ANALYSIS_INSTRUCTIONS,
     inputBlocks: inputContent,
     zodSchema: commitAnalysesSchema,
     resultTag: "commitAnalyses_result",
   });
+
+  validateCommitAnalysesResponse(result, batch);
+
+  return result;
 };
 
 const evaluateCommitSummaries = async (
