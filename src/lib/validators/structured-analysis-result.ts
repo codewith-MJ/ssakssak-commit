@@ -13,13 +13,14 @@ const diagram = z
   })
   .strict();
 
+// LLM이 가끔 스키마에 없는 필드(예: legacy title)를 붙일 수 있으므로,
+// 정의된 키만 허용하고 나머지는 제거하는 .strip() 사용 (전체 검증 실패 방지).
 const analysisExplanation = z
   .object({
     type: z.literal("explanation"),
-    title: z.string().nullable(),
     description: z.string(),
   })
-  .strict();
+  .strip();
 
 const codeHighlightRange = z.object({
   startLine: z.number().int().positive(),
