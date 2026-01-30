@@ -1,9 +1,9 @@
-import { Analysis } from "@/types/analysis";
+import type { DiagramAnalysis } from "@/types/analysis";
 import Mermaid from "@/app/ui/report-view/mermaid";
 import { MermaidConfig } from "mermaid";
 
 interface AnalysisSummaryProps {
-  data: Analysis;
+  data: DiagramAnalysis;
 }
 
 function DiagramBox({ data }: AnalysisSummaryProps) {
@@ -24,7 +24,7 @@ function DiagramBox({ data }: AnalysisSummaryProps) {
           {data.description}
         </p>
 
-        {data.type === "diagram" && data.chart && (
+        {data.chart && (
           <div className="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-4">
             <Mermaid chart={data.chart} config={defaultMermaidConfig} />
             {data.caption && (

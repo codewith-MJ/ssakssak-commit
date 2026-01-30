@@ -1,8 +1,8 @@
-import { Analysis } from "@/types/analysis";
+import type { CodeDiffAnalysis } from "@/types/analysis";
 import { MonacoFileViewer } from "@/app/ui/report-view/monaco-file/MonacoFileViewer";
 
 interface AnalysisSummaryProps {
-  data: Analysis;
+  data: CodeDiffAnalysis;
 }
 
 function CodeDiff({ data }: AnalysisSummaryProps) {
@@ -16,7 +16,7 @@ function CodeDiff({ data }: AnalysisSummaryProps) {
           {data.description}
         </p>
 
-        {data.files?.map((file) => (
+        {data.files.map((file) => (
           <div key={`${file.path}-${file.status}`} className="mb-6">
             <MonacoFileViewer
               filename={file.path}
