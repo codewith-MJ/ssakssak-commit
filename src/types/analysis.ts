@@ -10,7 +10,7 @@ type Analysis =
       title: string;
       description: string;
       files: CommitFile[];
-      caption: string;
+      caption: string | null;
     }
   | {
       type: "diagram";
@@ -18,7 +18,7 @@ type Analysis =
       title: string;
       description: string;
       chart: string;
-      caption: string;
+      caption: string | null;
     };
 
 export type ExplanationAnalysis = Extract<Analysis, { type: "explanation" }>;
