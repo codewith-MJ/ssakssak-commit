@@ -16,7 +16,7 @@ const buildCommitIdToHasPatch = (
   const map = new Map<string, boolean>();
   for (const commit of inputBatch) {
     const hasPatch = commit.files.some(
-      (f) => f.codeDiffSummary?.trim().length > 0,
+      (f) => (f.codeDiffSummary?.trim() ?? "").length > 0,
     );
     map.set(commit.commitId, hasPatch);
   }
@@ -51,18 +51,19 @@ const validateRequiredAnalyses = (
       (analysis) => analysis.type === "explanation",
     );
 
-    if (!hasExplanation) {
-      missingAnalyses.push(`commitId: ${commit.commitId} (explanation 누락)`);
-    }
-    if (!hasCodeDiff && !hasExplanation) {
+    if (!hasExplanation && !hasCodeDiff) {
       missingAnalyses.push(
         `commitId: ${commit.commitId} (code-diff와 explanation 모두 누락)`,
       );
-    }
-    if (commitIdToHasPatch?.get(commit.commitId) === true && !hasCodeDiff) {
-      missingAnalyses.push(
-        `commitId: ${commit.commitId} (code-diff 누락, 해당 커밋에 patch 존재)`,
-      );
+    } else {
+      if (!hasExplanation) {
+        missingAnalyses.push(`commitId: ${commit.commitId} (explanation 누락)`);
+      }
+      if (commitIdToHasPatch?.get(commit.commitId) === true && !hasCodeDiff) {
+        missingAnalyses.push(
+          `commitId: ${commit.commitId} (code-diff 누락, 해당 커밋에 patch 존재)`,
+        );
+      }
     }
   }
 
