@@ -182,6 +182,7 @@ const CHANGE_SUMMARY_AND_CONCLUSION = `
 - 피할 예: "A 추가, B 제거, C 수정"처럼 불릿 없이 나열.
 
 [commitConclusion 규칙]
+- commitConclusion은 **커밋 단위 최상위 필드로만** 출력한다. analyses 배열의 explanation 블록에 commitConclusion 내용을 중복하여 넣지 않는다.
 - commitConclusion은 changeSummary/description의 반복이 아니라, “정리” 문단이다.
 - 아래 3요소 중 2개 이상을 포함해 2~4문장(또는 불릿)으로 정리한다. 가능하면 100자 이상으로 의미/영향·주의점·확인 포인트를 구체적으로 쓴다:
   1) 의미/영향: 이 변경으로 무엇이 좋아지거나 명확해졌는지
@@ -320,6 +321,11 @@ classDiagram
 // ============================================================================
 
 const CODE_DIFF_FORMAT = `
+[Code-Diff 파일·스니펫 선택 규칙]
+- code-diff에 넣을 **파일·스니펫**은 **분석 내용(description/codeDiffSummary)과 일치하는 핵심 코드**를 기준으로 선택한다.
+- 커밋 diff의 **첫 번째·두 번째 파일 순서에 한정하지 않는다**. 세 번째 이후 파일이 핵심이면 해당 파일을 포함한다.
+- 각 code-diff 항목의 \`files\` 배열에는, 그 항목의 \`title\`/\`description\`에서 설명한 변경이 실제로 일어난 파일과 코드 스니펫만 넣는다.
+
 [Code-Diff 필드 설명]
 - (analysis) code-diff.description: 어떤 로직/조건/입출력/검증이 바뀌었는지 2~4문장 이상으로 구체적으로 설명한다. "추가했습니다/수정했습니다" 수준으로 끝내지 않는다.
 - codeDiffSummary: 핵심 변경사항에 대한 설명 (80~200자, 2~4문장으로 구체적으로)
@@ -327,11 +333,13 @@ const CODE_DIFF_FORMAT = `
 - code: 핵심 변경이 포함된 스니펫 (최소 5줄, 최대 30줄 포함)
 - language: 사용된 언어
 - status: 커밋 데이터의 status
-- highlights: 변경 포인트만 강조 (전체 범위 금지)
-  - 여러 구간 가능 (최대 3구간 권장, 필요 시 초과 가능)
-  - startLine: 스니펫 내 시작 줄 번호
-  - endLine: 포함 종료 줄 번호
 - 변경 맥락(앞뒤 몇 줄)을 포함하도록 한다. 줄 수가 적으면 가능한 범위 내에서만 출력한다
+
+[highlights 규칙 - 설명과 일치]
+- \`highlights\`는 **description 및 codeDiffSummary에서 설명한 핵심 변경 라인**과 정확히 대응해야 한다.
+- 스니펫 내에서 실제로 변경·추가·삭제된 로직이 있는 줄만 \`startLine\`/\`endLine\`에 넣는다. 전체 블록을 넣지 않는다.
+- description/codeDiffSummary에 "A 함수 수정", "B 검증 추가" 등이 있으면, 해당 A/B가 있는 라인 구간만 하이라이트에 포함한다.
+- 여러 구간 가능 (최대 3구간 권장, 필요 시 초과 가능). startLine: 스니펫 내 시작 줄 번호, endLine: 포함 종료 줄 번호.
 `;
 
 // ============================================================================
@@ -436,6 +444,8 @@ const VALIDATION_CHECKLIST = `
 ✓ description에 변경 이유·의도 또는 제거/수정/추가 구분이 드러나는가? ("X를 제거했습니다."만 있는 단조로운 문장은 피한다.)
 ✓ changeSummary에서 여러 항목을 나열할 때 불릿(• 또는 -)을 사용했는가? (쉼표로만 나열하지 않는다.)
 ✓ commitConclusion이 changeSummary/description을 그대로 반복하지 않고 “정리/영향/확인 포인트” 중심으로 작성되었는가?
+✓ commitConclusion이 analyses의 explanation 블록에 중복되어 들어가지 않았는가? (commitConclusion은 커밋 최상위 필드로만 출력)
+✓ code-diff의 files에 포함된 파일이 해당 항목의 title/description에서 설명한 변경과 대응하는가?
 
 [나쁜 예 - 피할 것]
 - 제목: "변경 배경", "모델 제거" 등을 여러 분석에 그대로 반복 사용.
