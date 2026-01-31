@@ -68,6 +68,14 @@ function CommitSection({ commits }: CommitSectionProps) {
                       return null;
                   }
                 })}
+                <section>
+                  <h3 className="mb-2 text-lg font-semibold text-gray-900">
+                    핵심 정리
+                  </h3>
+                  <p className="mb-4 text-sm leading-relaxed whitespace-pre-line text-gray-700">
+                    {commit.commitConclusion}
+                  </p>
+                </section>
               </div>
             </div>
           </div>

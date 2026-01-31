@@ -2,7 +2,6 @@ interface SummaryBoxProps {
   reportSummary: string;
 }
 
-/** 불릿(•) 앞 공백을 줄바꿈으로 바꿔 pre-line에서 항목이 나뉘어 보이게 함 */
 function normalizeBulletLineBreaks(text: string): string {
   return text.replace(/\s+•\s+/g, "\n• ");
 }
