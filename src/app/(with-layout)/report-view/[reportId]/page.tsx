@@ -35,7 +35,7 @@ async function ReportViewPage({
 
   if (response.status === 401) {
     redirect(
-      `/login?callbackUrl=${encodeURIComponent(`/report-view/${reportId}`)}`,
+      `/access-denied?callbackUrl=${encodeURIComponent(`/report-view/${reportId}`)}`,
     );
   }
 
