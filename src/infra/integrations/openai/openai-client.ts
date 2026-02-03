@@ -21,6 +21,18 @@ interface StructuredTextGenerationParams<T> {
   resultTag: string;
 }
 
+const buildInputMessages = (
+  instructions: string,
+  inputBlocks: { type: "input_text"; text: string }[],
+) => {
+  return instructions
+    ? [
+        { role: "developer" as const, content: instructions },
+        { role: "user" as const, content: inputBlocks },
+      ]
+    : [{ role: "user" as const, content: inputBlocks }];
+};
+
 const structuredTextGenerator = async <T>({
   maxOutputTokens,
   instructions,
@@ -29,16 +41,12 @@ const structuredTextGenerator = async <T>({
   resultTag,
 }: StructuredTextGenerationParams<T>): Promise<T> => {
   try {
+    const input = buildInputMessages(instructions, inputBlocks);
+
     const response = await client.responses.create({
       model: process.env.OPENAI_MODEL,
       max_output_tokens: maxOutputTokens,
-      instructions: instructions,
-      input: [
-        {
-          role: "user",
-          content: inputBlocks,
-        },
-      ],
+      input,
       text: {
         format: zodTextFormat(zodSchema, resultTag),
       },
