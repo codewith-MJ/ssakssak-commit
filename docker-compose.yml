@@ -1,21 +1,46 @@
-version: "3.9"
+# 로컬에서 앱(web + worker + redis)을 한 번에 띄우는 구성.
+# 이 파일은 그대로 EC2 서버(Stage 3)에도 올라간다.
+# 실행: docker compose up --build
+#
+# DB는 컨테이너가 아니라 외부 관리형(Supabase)을 사용한다 → DATABASE_URL은 .env에서 주입.
+# ⚠️ redis는 컨테이너끼리 "서비스 이름"으로 통신하므로 REDIS_URL 호스트가 redis 다.
 
 services:
-  app:
+  # ---------- Next.js 웹 서버 (요청 받고 작업을 큐에 넣음) ----------
+  web:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        REDIS_URL: ${REDIS_URL}
+    image: ssakssak-commit:local # worker와 공유 → 이미지 한 번만 빌드
+    command: npm run start # 운영 빌드 실행 (next start)
+    env_file:
+      - .env # DATABASE_URL(Supabase) + 비밀값(OPENAI/GITHUB/NEXTAUTH 등) 주입
     environment:
-      - REDIS_URL=${REDIS_URL}
+      - NODE_ENV=production
+      - REDIS_URL=redis://redis:6379 # 컨테이너 네트워크 기준으로 .env 값을 덮어씀
     ports:
-      - "3000:3000"
+      - "3000:3000" # 호스트 3000 → 컨테이너 3000 (브라우저 접속용)
     depends_on:
-      - redis
+      redis:
+        condition: service_started
 
+  # ---------- BullMQ 워커 (실제 GitHub 수집 + OpenAI 분석 처리) ----------
+  worker:
+    image: ssakssak-commit:local # web과 동일 이미지 재사용
+    command: npm run worker:start:prod # ⚠️ .env 안 읽는 컨테이너 전용 스크립트
+    env_file:
+      - .env
+    environment:
+      - NODE_ENV=production
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      redis:
+        condition: service_started
+      web:
+        condition: service_started # 이미지 빌드는 web에서 한 번만 일어나도록
+
+  # ---------- Redis (BullMQ 큐 + 비로그인 리포트 캐시) ----------
   redis:
     image: redis:7-alpine
-    container_name: redis
     ports:
-      - "6379:6379"
+      - "6380:6379" # 호스트 6380 (로컬 redis 6379와 충돌 회피). 내부는 6379
