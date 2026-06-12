@@ -24,7 +24,7 @@ npm run format         # prettier --write .
 npm run check          # eslint + prettier --check (커밋 전 확인)
 npx prisma db push     # schema.prisma → DB 반영 (migrations 파일 미사용)
 npx prisma generate    # Prisma Client 재생성 (Dockerfile 빌드 단계에서도 실행)
-docker-compose up      # app + redis 컨테이너
+docker-compose up      # web + worker + redis (운영은 docker-compose.prod.yml: web + worker + caddy)
 ```
 
 - 테스트 프레임워크 없음. lint-staged + husky가 커밋 시 `eslint --max-warnings=0` + `prettier --check` 실행
@@ -63,13 +63,18 @@ docker-compose up      # app + redis 컨테이너
 - `lib/auth/auth-options.ts` — GitHub provider, JWT 전략(scope: `repo read:user user:email read:org`), 콜백은 `lib/auth/callbacks/{sign-in,jwt,session}.ts`로 분리
 - GitHub access token은 JWT에 저장, 만료 시 `helpers/refresh-access-token.ts`로 갱신
 - 서버에서 인증 강제: `requireUserId()`(없으면 `UnauthorizedError`), token은 `getAccessToken()`
-- 401 시 클라이언트는 `lib/handle-api-error.ts`가 `/auth/error`로, 리포트 뷰는 로그인 리다이렉트(현재 브랜치 작업)
+- 401 시 클라이언트는 `lib/handle-api-error.ts`가 `/auth/error`로, 리포트 뷰는 로그인 리다이렉트
 
 ### 라우트 그룹
 
 - `app/(with-layout)` — 공통 레이아웃 페이지(홈, reports, report-view, loading)
 - `app/(no-layout)` — 레이아웃 없는 페이지(login, error, access-denied, auth/error)
 - `app/ui/*` — 페이지별 프레젠테이션 컴포넌트 (라우트와 분리)
+
+### 배포
+
+- `main` push → GitHub Actions(`.github/workflows/deploy.yml`)가 EC2에 SSH 접속해 `docker-compose.prod.yml` 재빌드·재기동 (즉시 운영 반영)
+- 배포 동시 실행 방지(concurrency) 설정됨 — 서버 RAM 한계로 docker build 병렬 실행 불가
 
 ### 영역별 하위 가이드
 
