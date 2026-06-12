@@ -23,6 +23,11 @@ RUN npx prisma generate
 # TODO(후속): 큐/redis 연결을 지연 초기화로 바꾸면 이 placeholder 제거 가능.
 ENV REDIS_URL=redis://localhost:6379
 
+# 저메모리 인스턴스(t3.micro ~1GB)에서 next build의 타입체크 단계가 V8 힙 상한(자동
+# ~460MB)에 닿아 OOM(SIGABRT)으로 죽는다. 힙 상한을 2GB로 올려 물리 RAM 초과분은
+# 스왑으로 흘리게 한다(빌드 시에만 적용, 런타임 메모리에는 영향 없음).
+ENV NODE_OPTIONS=--max-old-space-size=2048
+
 # Next.js 운영 빌드 (next build)
 RUN npm run build
 
