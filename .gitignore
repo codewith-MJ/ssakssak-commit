@@ -32,6 +32,8 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+# 단, 비밀값 없는 예시 템플릿은 커밋 허용
+!.env.production.example
 
 # vercel
 .vercel
